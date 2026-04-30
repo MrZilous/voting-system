@@ -34,7 +34,7 @@ int checkAdmin(int id, int list[])
         }
     }
 
-    printf("Admin not found !!");
+    printf("Admin not found !!\n");
 
     return 0;
 }
