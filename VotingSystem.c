@@ -38,6 +38,7 @@ struct Voter voterList[Max_Voter_Count];
 void intializeCandidates();
 int checkAdminId(int id);
 void registerVoter();
+void verifyid(int id);
 int validId(int id);
 void updateVoteCount();
 void PrintParty()
@@ -83,7 +84,8 @@ void main() {
     printf("--------- Voter Registration -------\n");
     registerVoter();
     PrintParty();
-
+    updateVoteCount();
+    goto askId;
 
 }
 
@@ -139,7 +141,6 @@ void registerVoter () {
     
     printf("Voter is Successfully Registered ... !!");
 }
-
 int validId(int id){
     int i ;
     for(i = 0 ; i < VoterCount ; i++){
@@ -155,10 +156,10 @@ void updateVoteCount(){
 
     int choice;
 
-    printf("Your Choice : ");
+    printf("\nYour Choice : ");
     scanf("%d", &choice);
 
-    partyList[choice].voteCount++;   
+    partyList[choice - 1].voteCount++;   
     printf("... Vote Successfully ...");
 }
 
@@ -171,6 +172,18 @@ void findWinner(){
         curr = partyList[i].voteCount;
         winner = curr > max ? i : winner;
         max = fmax(curr , max);
+        for(i=0 ; i<Max_Candidate_Count ; i++)
+        {
+            if(i == winner)
+            {
+                continue;
+            }
+            else if(max == partyList[i].voteCount)
+            {
+                printf("Draw \n %s-%s",partyList[winner].name,partyList[i].name);
+                return;
+            }
+        }
     }
 
     printf("The Winner of the Election is : %s \n Candidate have total Votes : %d", partyList[winner].name , partyList[winner].voteCount);
