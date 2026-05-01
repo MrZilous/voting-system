@@ -22,7 +22,6 @@ struct Voter {
     int id;
     int isVoted ; //0 -> Not Voted , 1 -> Voted
 };
-int VoterCount = 0 ; //Shows that how many voter has registered ...
 
 struct Candidates {
     char name[50];
@@ -35,18 +34,19 @@ struct Voter voterList[Max_Voter_Count];
 
 
 //Function Declaration
+void fetchVoters();
 void intializeCandidates();
 int checkAdminId(int id);
 void registerVoter();
-void verifyid(int id);
 int validId(int id);
+void addVoter(struct Voter v);
 void updateVoteCount();
 void PrintParty();
 void findWinner();
 
 
 //Global variables 
-
+int VoterCount = 0 ; //Shows that how many voter has registered ...
 
 
 //main function
@@ -55,7 +55,8 @@ void main() {
     //declaration 
     int adminId, adminDescision ;
 
-
+   //Initializing the System
+    fetchVoters();
     intializeCandidates();
 
     //Varifying admin 
@@ -84,6 +85,20 @@ void main() {
 }
 
 //Functions Logic
+
+void fetchVoters(){
+
+    FILE *fptr = fopen("voters.txt", "r");
+    if(fptr == NULL){
+        return ;
+    }
+    while(fscanf(fptr, "%s %d", voterList[VoterCount].name, voterList[VoterCount].id ) != EOF){
+        VoterCount++;
+    }
+
+    fclose(fptr);
+}
+
 void intializeCandidates() {
 
     //Candidate - A
@@ -132,8 +147,9 @@ void registerVoter () {
     }else{
         printf("Voter id has alrady in use !! Try New one");
         goto askId;
-    }  
-    VoterCount++;
+    }
+   addVoter( voterList[VoterCount] );
+   VoterCount++;
     printf("Voter is Successfully Registered ... !!");
 }
 
@@ -146,6 +162,15 @@ int validId(int id){
     }
 
     return 1;
+}
+
+void addVoter(struct Voter v){
+    FILE *ftr = fopen("voters.txt", "a");
+
+    if(ftr == NULL) return ;
+
+    fprintf(ftr, "%s %d\n", v.name, v.id);
+    fclose(ftr);
 }
 
 void updateVoteCount(){
