@@ -41,13 +41,7 @@ void registerVoter();
 void verifyid(int id);
 int validId(int id);
 void updateVoteCount();
-void PrintParty()
-{
-    for(int i=0 ; i<Max_Candidate_Count ; i++)
-    {
-        printf("\n%d - %s",i+1,partyList[i].name);
-    }
-}
+void PrintParty();
 void findWinner();
 
 
@@ -133,14 +127,16 @@ void registerVoter () {
     //Asking for Unique id
     askId : printf("\n Enter your Id : ");
     scanf("%d", &id);
-    if(validId){
+    if(validId(id)){
         voterList[VoterCount].id = id;
     }else{
+        printf("Voter id has alrady in use !! Try New one");
         goto askId;
     }  
-    
+    VoterCount++;
     printf("Voter is Successfully Registered ... !!");
 }
+
 int validId(int id){
     int i ;
     for(i = 0 ; i < VoterCount ; i++){
@@ -162,6 +158,15 @@ void updateVoteCount(){
     partyList[choice - 1].voteCount++;   
     printf("... Vote Successfully ...");
 }
+
+void PrintParty()
+{
+    for(int i=0 ; i<Max_Candidate_Count ; i++)
+    {
+        printf("\n%d - %s",i+1,partyList[i].name);
+    }
+}
+
 
 void findWinner(){
 
