@@ -40,6 +40,13 @@ int checkAdminId(int id);
 void registerVoter();
 int validId(int id);
 void updateVoteCount();
+void PrintParty()
+{
+    for(int i=0 ; i<Max_Candidate_Count ; i++)
+    {
+        printf("\n%d - %s",i+1,partyList[i].name);
+    }
+}
 void findWinner();
 
 
@@ -73,8 +80,9 @@ void main() {
         return ;
     }
 
-    printf("--------- Voter Registration -------");
+    printf("--------- Voter Registration -------\n");
     registerVoter();
+    PrintParty();
 
 
 }
