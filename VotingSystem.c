@@ -39,6 +39,7 @@ void intializeCandidates();
 int checkAdminId(int id);
 void registerVoter();
 int validId(int id);
+void updateVoteCount();
 void findWinner();
 
 
@@ -69,6 +70,7 @@ void main() {
 
     if(!adminDescision){
         findWinner();
+        return ;
     }
 
     printf("--------- Voter Registration -------");
@@ -139,6 +141,17 @@ int validId(int id){
     }
 
     return 1;
+}
+
+void updateVoteCount(){
+
+    int choice;
+
+    printf("Your Choice : ");
+    scanf("%d", &choice);
+
+    partyList[choice].voteCount++;   
+    printf("... Vote Successfully ...");
 }
 
 void findWinner(){
