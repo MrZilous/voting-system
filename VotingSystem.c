@@ -20,7 +20,6 @@
 struct Voter {
     char name[50];
     int id;
-    int isVoted ; //0 -> Not Voted , 1 -> Voted
 };
 
 struct Candidates {
@@ -35,12 +34,14 @@ struct Voter voterList[Max_Voter_Count];
 
 //Function Declaration
 void fetchVoters();
+void fetchCandidates();
 void intializeCandidates();
 int checkAdminId(int id);
 void registerVoter();
 int validId(int id);
 void addVoter(struct Voter v);
 void updateVoteCount();
+void addCandidateVoteCount();
 void PrintParty();
 void findWinner();
 
@@ -56,8 +57,9 @@ void main() {
     int adminId, adminDescision ;
 
    //Initializing the System
-    fetchVoters();
     intializeCandidates();
+    fetchCandidates();
+    fetchVoters();
 
     //Varifying admin 
     askId : printf("\nEnter Admin Id : ");
@@ -92,8 +94,20 @@ void fetchVoters(){
     if(fptr == NULL){
         return ;
     }
-    while(fscanf(fptr, "%s %d", voterList[VoterCount].name, voterList[VoterCount].id ) != EOF){
+    while(fscanf(fptr, "%s %d", &voterList[VoterCount].name, &voterList[VoterCount].id ) != EOF){
         VoterCount++;
+    }
+
+    fclose(fptr);
+}
+
+void fetchCandidates(){
+    FILE *fptr = fopen("candidate.txt", "r");
+    if(fptr == NULL){
+        return ;
+    }
+    for(int i = 0 ; i < Max_Candidate_Count ; i++){
+        fscanf(fptr, "%s %d", &partyList[i].name , &partyList[i].voteCount);
     }
 
     fclose(fptr);
@@ -180,8 +194,20 @@ void updateVoteCount(){
     printf("\nYour Choice : ");
     scanf("%d", &choice);
 
-    partyList[choice - 1].voteCount++;   
+    partyList[choice - 1].voteCount++;  
+    addCandidateVoteCount(); 
     printf("... Vote Successfully ...");
+}
+
+void addCandidateVoteCount(){
+    FILE *ftr = fopen("candidate.txt", "w");
+
+    if(ftr == NULL) return ;
+    for(int i = 0 ; i < Max_Candidate_Count ; i++){
+        fprintf(ftr, "%s %d\n", partyList[i].name, partyList[i].voteCount);
+    }
+
+    fclose(ftr);
 }
 
 void PrintParty()
@@ -202,17 +228,17 @@ void findWinner(){
         curr = partyList[i].voteCount;
         winner = curr > max ? i : winner;
         max = fmax(curr , max);
-        for(i=0 ; i<Max_Candidate_Count ; i++)
+    }
+
+    for(int i=0 ; i<Max_Candidate_Count ; i++){
+        if(i == winner)
         {
-            if(i == winner)
-            {
-                continue;
-            }
-            else if(max == partyList[i].voteCount)
-            {
-                printf("Draw \n %s-%s",partyList[winner].name,partyList[i].name);
-                return;
-            }
+            continue;
+        }
+        else if(max == partyList[i].voteCount)
+        {
+            printf("Draw \n %s-%s",partyList[winner].name,partyList[i].name);
+            return;
         }
     }
 
